@@ -20,7 +20,7 @@ public class Main {
                 ClientManager.addNewClient(scanner, connection, dateFormat, clientCache);
 
                 // После добавления клиента, спрашиваем о создании карты
-                System.out.println("Создать карту для клиента? (Да/Нет)");
+                System.out.println("Создать карту для клиента ? (Да/Нет)");
                 String cardResponse = scanner.nextLine();
                 if (cardResponse.equalsIgnoreCase("Да")) {
                     ClientManager.createCard(scanner, connection, clientCache, cardsCache);
