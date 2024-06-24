@@ -101,7 +101,6 @@ public class ClientManager {
                 int newCardId = generatedKeys.getInt(1);
                 BankCard newCard = new BankCard(client, cardNumber, issueDate, expirationDate);
                 cardsCache.put(newCardId, newCard);
-                // Измененная строка вывода
                 System.out.println("Новая карта добавлена с ID: " + newCardId + ", номер карты: " + cardNumber);
             }
 

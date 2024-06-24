@@ -20,5 +20,4 @@ public class DatabaseManager {
         }
     }
 
-    // Другие методы для работы с базой данных
 }

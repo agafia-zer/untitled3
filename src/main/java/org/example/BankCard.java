@@ -9,14 +9,13 @@ public class BankCard {
     private String cardNumber;
     private Date issueDate;
     private Date expiryDate;
-    // Другие поля, например, тип карты, CVV и т.д.
+
 
     public BankCard(Client client, String cardNumber, Date issueDate, Date expiryDate) {
         this.client = client;
         this.cardNumber = cardNumber;
         this.issueDate = issueDate;
         this.expiryDate = expiryDate;
-        // Инициализация других полей
     }
 
     // Геттеры и сеттеры
@@ -35,6 +34,4 @@ public class BankCard {
     public Date getExpiryDate() {
         return expiryDate;
     }
-
-    // Другие геттеры и сеттеры
 }
