@@ -1,5 +1,4 @@
 package main.java.org.examples;
-
 import org.example.Client;
 import org.junit.jupiter.api.Test;
 
