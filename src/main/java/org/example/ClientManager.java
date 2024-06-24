@@ -105,7 +105,7 @@ public class ClientManager {
             }
 
         } catch (Exception e) {
-            System.out.println("Ошибка при создании карты: " + e.getMessage());
+            System.out.println(" Ошибка при создании карты: " + e.getMessage());
         }
     }
 
