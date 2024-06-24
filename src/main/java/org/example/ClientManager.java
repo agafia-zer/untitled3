@@ -2,12 +2,14 @@ package org.example;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.Writer;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.Calendar;
 
 
 public class ClientManager {
@@ -172,4 +174,71 @@ public class ClientManager {
             System.out.println("Ошибка при аннулировании карты: " + e.getMessage());
         }
     }
+
+
+
+    // Метод для проверки и аннулирования просроченных карт
+    public static void checkAndCancelExpiredCards(Connection connection, HashMap<Integer, BankCard> cardsCache) {
+        try {
+            // Получаем текущую дату
+            Date currentDate = new Date();
+
+            // Подготавливаем SQL запрос для выборки всех карт с истекшим сроком действия
+            PreparedStatement selectExpiredCardsStmt = connection.prepareStatement(
+                    "SELECT CardId, ClientId, CardNumber FROM cards WHERE ExpirationDate < ?");
+            selectExpiredCardsStmt.setDate(1, new java.sql.Date(currentDate.getTime()));
+
+            // Выполняем запрос
+            ResultSet expiredCardsResultSet = selectExpiredCardsStmt.executeQuery();
+
+            // Перебираем все просроченные карты
+            while (expiredCardsResultSet.next()) {
+                int cardId = expiredCardsResultSet.getInt("CardId");
+                int clientId = expiredCardsResultSet.getInt("ClientId");
+                String cardNumber = expiredCardsResultSet.getString("CardNumber");
+
+
+                PreparedStatement cancelCardStmt = connection.prepareStatement(
+                        "DELETE FROM cards WHERE CardId = ?");
+                cancelCardStmt.setInt(1, cardId);
+                int affectedRows = cancelCardStmt.executeUpdate();
+
+                if (affectedRows > 0) {
+
+                    cardsCache.remove(cardId);
+                    sendNotificationToClient(connection, clientId, cardNumber);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Ошибка при проверке и аннулировании просроченных карт: " + e.getMessage());
+        }
+    }
+
+    // Метод для отправки уведомления клиенту
+    private static void sendNotificationToClient(Connection connection, int clientId, String cardNumber) throws SQLException {
+        // Получаем данные клиента
+        PreparedStatement getClientStmt = connection.prepareStatement(
+                "SELECT FullName, Email FROM users WHERE ClientId = ?");
+        getClientStmt.setInt(1, clientId);
+        ResultSet clientResultSet = getClientStmt.executeQuery();
+
+        if (clientResultSet.next()) {
+            String fullName = clientResultSet.getString("FullName");
+            String email = clientResultSet.getString("Email");
+
+
+            String notification = "Уважаемый(ая) " + fullName + ", ваша карта с номером: " + cardNumber +
+                    " была аннулирована.";
+
+
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter("notification.txt"))) {
+                writer.write(notification);
+                System.out.println("Внимание !!! Было отправлено автоматическое уведомление  на: " + email + "по причине истечения срока активности карты");
+            } catch (IOException e) {
+                System.out.println("Ошибка при записи уведомления: " + e.getMessage());
+            }
+        }
+    }
+
+
 }

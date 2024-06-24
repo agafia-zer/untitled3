@@ -22,7 +22,6 @@ public class BankCard {
     public Client getClient() {
         return client;
     }
-
     public String getCardNumber() {
         return cardNumber;
     }
