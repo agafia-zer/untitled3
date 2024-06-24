@@ -42,5 +42,5 @@ class BankCardTest {
         assertEquals(expiryDate, bankCard.getExpiryDate());
     }
 
-    // Добавьте другие тесты для оставшихся геттеров и сеттеров
+
 }
