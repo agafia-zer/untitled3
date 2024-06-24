@@ -1,4 +1,4 @@
-package org.example; // Измените на ваш реальный пакет
+package org.example;
 
 import com.mysql.cj.jdbc.Driver;
 import java.sql.Connection;
