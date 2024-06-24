@@ -160,7 +160,7 @@ public class ClientManager {
                         String email = clientResultSet.getString("Email");
 
                         // Создание текстового файла с уведомлением
-                        String notification = "Здравствуйте, " + fullName + ", ваша карта с номером: " + cardNumber + " была аннулирована.";
+                        String notification = "Здравствуйте, " + fullName + ", ваша карта с номером: " + cardNumber + " была аннулирована, по причине истечения срока действия.";
                         try (BufferedWriter writer = new BufferedWriter(new FileWriter("notification.txt"))) {
                             writer.write(notification);
                             System.out.println("Уведомление было отправлено на: " + email);
